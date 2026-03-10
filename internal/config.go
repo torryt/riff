@@ -20,6 +20,12 @@ func init() {
 	CdPathFile = filepath.Join(RiffDir, ".cd-path")
 }
 
+// HasShellWrapper reports whether the shell wrapper is active.
+// The wrapper sets RIFF_WRAPPER=1 before invoking the binary.
+func HasShellWrapper() bool {
+	return os.Getenv("RIFF_WRAPPER") == "1"
+}
+
 const MetadataFile = ".riff.json"
 
 // Template defines a built-in or user-configured project template.
