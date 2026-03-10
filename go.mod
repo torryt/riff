@@ -1,4 +1,4 @@
-module github.com/torry/riff
+module github.com/torryt/riff
 
 go 1.26.1
 
