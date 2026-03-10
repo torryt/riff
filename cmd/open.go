@@ -35,7 +35,8 @@ func RunOpen(args []string) {
 			if desc == "" {
 				desc = internal.Dim("(no description)")
 			}
-			fmt.Printf("  %s - %s\n", internal.Cyan(p.ID), desc)
+			age := internal.Dim(internal.FormatAge(p.Created))
+			fmt.Printf("  %s - %s %s\n", internal.Cyan(p.ID), desc, age)
 		}
 	}
 
@@ -66,7 +67,8 @@ func RunOpen(args []string) {
 			if desc == "" {
 				desc = "(no description)"
 			}
-			label := p.ID + "  " + desc
+			age := internal.FormatAge(p.Created)
+			label := p.ID + "  " + desc + "  " + age
 			options = append(options, huh.NewOption[string](label, p.ID))
 		}
 
