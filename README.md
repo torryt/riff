@@ -15,6 +15,10 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
   - [Quick start](#quick-start-)
   - [Flags for `new`](#flags-for-new)
 - [How it works](#-how-it-works)
+- [Configuration](#%EF%B8%8F-configuration)
+  - [Initializing the config](#initializing-the-config)
+  - [Config options](#config-options)
+  - [JSON schema](#json-schema)
 - [AI descriptions](#-ai-descriptions)
 - [Templates](#-templates)
   - [Custom templates](#custom-templates)
@@ -58,6 +62,7 @@ riff <command> [options]
 | `riff open [id]` | Open a project (interactive picker if no ID) |
 | `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
 | `riff export <folder> [id]` | Export a project to a local folder (interactive picker if no ID) |
+| `riff config <init\|path>` | Manage configuration (initialize or print path) |
 | `riff init [shell]` | Shell setup for auto-cd (auto-detects shell) |
 | `riff update-docs` | Regenerate descriptions for all projects |
 | `riff help` | Show help |
@@ -104,6 +109,60 @@ riff new --no-git               # skip git init
 3. `riff list` shows all your projects with their descriptions — no more opening 14 folders to find the one with the WebSocket experiment
 4. `riff clean` lets you select and delete projects when the guilt of digital hoarding sets in
 
+## ⚙️ Configuration
+
+riff is configured via a JSON file at `~/.riff/config.json`. All settings are optional — riff works out of the box with sensible defaults.
+
+### Initializing the config
+
+Generate a starter config file with the built-in JSON schema for editor autocompletion:
+
+```bash
+riff config init
+```
+
+This creates two files in `~/.riff/`:
+
+| File | Purpose |
+|---|---|
+| `config.json` | Your configuration (edit this) |
+| `config.schema.json` | JSON schema for editor validation and autocompletion |
+
+To print the config file path (useful in scripts):
+
+```bash
+riff config path
+```
+
+### Config options
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `$schema` | `string` | — | Path or URL to the JSON schema. Set automatically by `riff config init`. |
+| `ai_provider` | `string` | `""` (auto-detect) | Preferred AI provider for project descriptions. Valid values: `"claude"`, `"copilot"`, or `""`. When empty, riff auto-detects (Claude Code preferred). Falls back to auto-detection if the chosen provider is not in `$PATH`. |
+| `templates` | `object` | `{}` | Custom project templates. Each key is a template name used with `riff new <name>`. Templates with the same name as a built-in override it. See [Custom templates](#custom-templates). |
+| `templates.<name>.command` | `string` | — | Shell command to initialize the project. Runs via `sh -c` in the new project directory. |
+
+**Full example:**
+
+```json
+{
+  "$schema": "./config.schema.json",
+  "ai_provider": "copilot",
+  "templates": {
+    "python": { "command": "python -m venv .venv && pip install pytest" },
+    "django": { "command": "uv init && uv pip install django && django-admin startproject app ." },
+    "svelte": { "command": "bunx create-vite . --template svelte-ts" }
+  }
+}
+```
+
+### JSON schema
+
+The config file has a [JSON schema](cmd/config.schema.json) that provides autocompletion and validation in editors that support it (VS Code, JetBrains, Neovim with LSP, etc.).
+
+Run `riff config init` to write both the config and schema files, or copy the schema manually from the repository.
+
 ## 🤖 AI descriptions
 
 riff uses an LLM CLI tool to auto-generate short project descriptions. It works out of the box — no config needed — and degrades gracefully if nothing is installed (you just won't get descriptions).
@@ -117,19 +176,7 @@ riff uses an LLM CLI tool to auto-generate short project descriptions. It works 
 
 riff auto-detects whichever is available in your `$PATH`. If both are installed, Claude Code wins.
 
-### Choosing a provider
-
-To pin a specific provider, set `ai_provider` in `~/.riff/config.json`:
-
-```json
-{
-  "ai_provider": "copilot"
-}
-```
-
-Valid values: `"claude"`, `"copilot"`. Omit the key (or leave it `""`) to auto-detect.
-
-If the configured provider isn't found in `$PATH`, riff falls back to auto-detection.
+To pin a specific provider, set [`ai_provider`](#config-options) in your config.
 
 ### No provider installed?
 
@@ -152,7 +199,7 @@ riff ships with built-in templates that Just Work™:
 
 ### Custom templates
 
-Override built-ins or add your own in `~/.riff/config.json`:
+Override built-ins or add your own via the `templates` key in `~/.riff/config.json` (see [Configuration](#%EF%B8%8F-configuration)):
 
 ```json
 {

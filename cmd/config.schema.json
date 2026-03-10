@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "riff configuration",
+  "description": "Configuration file for riff — a CLI tool for managing throwaway projects. Place this file at ~/.riff/config.json.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path or URL to the JSON schema for editor validation."
+    },
+    "ai_provider": {
+      "type": "string",
+      "enum": ["claude", "copilot", ""],
+      "default": "",
+      "description": "Preferred AI provider for generating project descriptions. Set to \"claude\" for Claude Code or \"copilot\" for GitHub Copilot CLI. Leave empty or omit to auto-detect (Claude Code is preferred when both are available)."
+    },
+    "templates": {
+      "type": "object",
+      "description": "Custom project templates. Each key is the template name used with `riff new <name>`. User-defined templates with the same name as a built-in template override it.",
+      "additionalProperties": {
+        "type": "object",
+        "description": "A project template definition.",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Shell command to initialize the project. Runs via `sh -c` in the new project directory."
+          }
+        },
+        "required": ["command"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
