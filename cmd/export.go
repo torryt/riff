@@ -105,7 +105,7 @@ func RunExport(args []string) {
 	}
 
 	// Resolve the source path.
-	srcPath := filepath.Join(internal.RiffDir, projectID)
+	srcPath := filepath.Join(internal.ProjectsDir, projectID)
 
 	// Resolve destination: relative to current working directory.
 	cwd, err := os.Getwd()

@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	RiffDir    string
-	CdPathFile string
+	RiffDir     string
+	ProjectsDir string
+	CdPathFile  string
 )
 
 func init() {
@@ -17,6 +18,7 @@ func init() {
 		home = "."
 	}
 	RiffDir = filepath.Join(home, ".riff")
+	ProjectsDir = filepath.Join(RiffDir, "projects")
 	CdPathFile = filepath.Join(RiffDir, ".cd-path")
 }
 
