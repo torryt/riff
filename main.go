@@ -8,6 +8,9 @@ import (
 	"github.com/torryt/riff/internal"
 )
 
+// version is set at build time via -ldflags "-X main.version=..."
+var version = "dev"
+
 func main() {
 	args := os.Args[1:]
 
@@ -38,6 +41,8 @@ func main() {
 		}
 	case "":
 		cmd.RunNew(args)
+	case "version", "--version", "-v":
+		fmt.Println("riff " + version)
 	case "help", "--help", "-h":
 		printHelp()
 	default:
@@ -66,6 +71,9 @@ func printHelp() {
 	fmt.Printf("    %-20s %s\n", internal.Green("init")+" "+internal.Dim("[shell]"), "Shell setup for auto-cd (auto-detects shell)")
 	fmt.Printf("    %-20s %s\n", internal.Green("update-docs"), "Regenerate descriptions for all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("help"), "Show this help message")
+
+	fmt.Printf("\n  %s\n", internal.Bold("Flags:"))
+	fmt.Printf("    %-28s %s\n", internal.Dim("--version, -v"), "Print version")
 
 	fmt.Printf("\n  %s %s\n", internal.Bold("Flags"), internal.Dim("(for new):"))
 	fmt.Printf("    %-28s %s\n", internal.Dim("-t, --template")+" <name>", "Use a project template (or pass name as argument)")
