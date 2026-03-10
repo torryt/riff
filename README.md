@@ -36,7 +36,7 @@ riff <command> [options]
 
 | Command | Description |
 |---|---|
-| `riff new` | Create a fresh project (interactive template picker) |
+| `riff new [-t <template>]` | Create a fresh project (optional `-t`/`--template`, otherwise interactive picker) |
 | `riff list` (or `ls`) | List all projects with descriptions |
 | `riff open [id]` | Open a project (interactive picker if no ID) |
 | `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
