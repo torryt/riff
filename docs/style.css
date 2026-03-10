@@ -516,6 +516,16 @@ section {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
 }
+.template-logo {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 0.75rem;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+.template-card:hover .template-logo {
+  opacity: 1;
+}
 .template-card {
   padding: 1.25rem;
   border: 1px solid var(--border);
