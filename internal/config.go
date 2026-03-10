@@ -15,11 +15,23 @@ var (
 )
 
 func init() {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		home = "."
+	InitPaths()
+}
+
+// InitPaths sets RiffDir, ProjectsDir and CdPathFile based on the RIFF_HOME
+// environment variable. When RIFF_HOME is unset it defaults to ~/.riff.
+// It is called automatically at init time and can be called again in tests
+// after changing the environment.
+func InitPaths() {
+	dir := os.Getenv("RIFF_HOME")
+	if dir == "" {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			home = "."
+		}
+		dir = filepath.Join(home, ".riff")
 	}
-	RiffDir = filepath.Join(home, ".riff")
+	RiffDir = dir
 	ProjectsDir = filepath.Join(RiffDir, "projects")
 	CdPathFile = filepath.Join(RiffDir, ".cd-path")
 }
