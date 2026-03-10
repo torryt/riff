@@ -65,6 +65,7 @@ riff clean
 ```bash
 riff new                        # interactive picker (or empty folder + git)
 riff new -t bun                 # bun init
+riff new -t dotnet              # dotnet new console
 riff new -t react               # create-vite react-ts
 riff new -t python              # uv init
 riff new -t rust                # cargo init
@@ -89,6 +90,7 @@ riff ships with built-in templates that Just Work™:
 | Name     | Command                                                  |
 | -------- | -------------------------------------------------------- |
 | `bun`    | `bun init -y`                                            |
+| `dotnet` | `dotnet new console`                                     |
 | `react`  | `bunx create-vite . --template react-ts`                 |
 | `python` | `uv init`                                                |
 | `rust`   | `cargo init .`                                           |
