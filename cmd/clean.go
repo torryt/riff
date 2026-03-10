@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/charmbracelet/huh"
 	"github.com/torryt/riff/internal"
@@ -24,8 +23,7 @@ func RunClean(args []string) {
 		return
 	}
 
-	// Fill in any missing descriptions in the background before displaying.
-	internal.BackfillDescriptions(projects, 15*time.Second)
+	// Skip description generation — clean only needs project names/paths.
 
 	// Helper: print available projects (used in non-interactive fallback).
 	printProjects := func() {
