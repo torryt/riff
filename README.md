@@ -21,10 +21,10 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 - [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli) for auto-generated descriptions (optional, but your future self will thank you)
 
 ```bash
-go install github.com/torry/riff@latest
+go install github.com/torryt/riff@latest
 ```
 
-Or grab a prebuilt binary from [Releases](https://github.com/torry/riff/releases) if commitment isn't your thing.
+Or grab a prebuilt binary from [Releases](https://github.com/torryt/riff/releases) if commitment isn't your thing.
 
 ## 🚀 Usage
 
