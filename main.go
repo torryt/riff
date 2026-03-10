@@ -76,7 +76,7 @@ func printHelp() {
 	fmt.Printf("  %s  %s %s\n\n", internal.Bold("Usage:"), internal.Cyan("riff"), "[command|template] [options]")
 
 	fmt.Printf("  %s\n", internal.Bold("Commands:"))
-	fmt.Printf("    %-20s %s\n", internal.Green("new")+" "+internal.Dim("(default)"), "Create a new project")
+	fmt.Printf("    %-20s %s\n", internal.Green("new")+" "+internal.Dim("[template]"), "Create a new project")
 	fmt.Printf("    %-20s %s\n", internal.Green("list")+internal.Dim(", ls"), "List all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("open")+" "+internal.Dim("[id]"), "Open a project (picks from list if no ID)")
 	fmt.Printf("    %-20s %s\n", internal.Green("clean")+" "+internal.Dim("[id]"), "Delete projects")
@@ -88,7 +88,6 @@ func printHelp() {
 	fmt.Printf("    %-28s %s\n", internal.Dim("--version, -v"), "Print version")
 
 	fmt.Printf("\n  %s %s\n", internal.Bold("Flags"), internal.Dim("(for new):"))
-	fmt.Printf("    %-28s %s\n", internal.Dim("-t, --template")+" <name>", "Use a project template (or pass name as argument)")
 	fmt.Printf("    %-28s %s\n", internal.Dim("--run")+" "+internal.Dim(`"<cmd>"`), "Run arbitrary init command")
 	fmt.Printf("    %-28s %s\n", internal.Dim("--no-git"), "Skip git initialization")
 	fmt.Println()
