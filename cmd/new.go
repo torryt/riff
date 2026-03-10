@@ -20,6 +20,7 @@ func RunNew(args []string) {
 	noGit := false
 	templateExplicit := false // true if user passed --template/-t
 
+	var positional []string
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
 		case "--template", "-t":
@@ -41,7 +42,15 @@ func RunNew(args []string) {
 			}
 		case "--no-git":
 			noGit = true
+		default:
+			positional = append(positional, args[i])
 		}
+	}
+
+	// Allow template name as a positional argument: `riff new bun`
+	if !templateExplicit && len(positional) > 0 {
+		templateName = positional[0]
+		templateExplicit = true
 	}
 
 	// --- Interactive template picker ---
