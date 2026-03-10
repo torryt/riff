@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/torryt/riff/internal"
 )
@@ -36,17 +35,6 @@ const fishWrapper = `function riff
 end
 `
 
-// detectShell returns the shell name from the SHELL env var (e.g. "bash", "zsh", "fish").
-// Returns empty string if SHELL is unset or unrecognised.
-func detectShell() string {
-	shell := filepath.Base(os.Getenv("SHELL"))
-	switch shell {
-	case "bash", "zsh", "fish":
-		return shell
-	}
-	return ""
-}
-
 // RunInit outputs a shell wrapper function for the given or detected shell.
 // Usage: eval "$(riff init)" or eval "$(riff init bash)" or riff init fish | source
 func RunInit(args []string) {
@@ -54,7 +42,7 @@ func RunInit(args []string) {
 	if len(args) > 0 {
 		shell = args[0]
 	} else {
-		shell = detectShell()
+		shell = internal.DetectShell()
 		if shell == "" {
 			fmt.Fprintln(os.Stderr, internal.Red("Error: could not detect shell. Specify one: riff init bash|zsh|fish"))
 			os.Exit(1)

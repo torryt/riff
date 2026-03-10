@@ -99,10 +99,5 @@ func RunOpen(args []string) {
 		os.Exit(1)
 	}
 
-	if !internal.HasShellWrapper() {
-		fmt.Printf("\n  %s %s\n",
-			internal.Dim("To auto-cd into projects, add to your shell config:"),
-			internal.Cyan("eval \"$(riff init)\""),
-		)
-	}
+	internal.EnsureShellWrapper(projectPath)
 }
