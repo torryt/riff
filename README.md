@@ -6,6 +6,21 @@
 
 Each project lives in `~/.riff/` and gets an auto-generated AI description so you can figure out what past-you was thinking. 🔮
 
+## Index
+
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+  - [Commands](#commands)
+  - [Quick start](#quick-start-)
+  - [Flags for `new`](#flags-for-new)
+- [How it works](#-how-it-works)
+- [Templates](#-templates)
+  - [Custom templates](#custom-templates)
+- [Shell integration](#-shell-integration)
+- [Contributing](#-contributing)
+- [License](#-license)
+
 ## ✨ Features
 
 - 🆕 **Create** isolated projects in one command — any language, any framework
