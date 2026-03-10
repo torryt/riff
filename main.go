@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/torry/riff/cmd"
-	"github.com/torry/riff/internal"
+	"github.com/torryt/riff/cmd"
+	"github.com/torryt/riff/internal"
 )
 
 func main() {

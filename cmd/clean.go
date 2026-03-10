@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/charmbracelet/huh"
-	"github.com/torry/riff/internal"
+	"github.com/torryt/riff/internal"
 )
 
 // RunClean handles the `riff clean [id]` command.
