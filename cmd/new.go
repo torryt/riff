@@ -18,20 +18,10 @@ func RunNew(args []string) {
 	var templateName string
 	var runCmd string
 	noGit := false
-	templateExplicit := false // true if user passed --template/-t
 
 	var positional []string
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
-		case "--template", "-t":
-			if i+1 < len(args) {
-				i++
-				templateName = args[i]
-				templateExplicit = true
-			} else {
-				fmt.Fprintln(os.Stderr, internal.Red("Error: --template requires a value"))
-				os.Exit(1)
-			}
 		case "--run":
 			if i+1 < len(args) {
 				i++
@@ -47,16 +37,15 @@ func RunNew(args []string) {
 		}
 	}
 
-	// Allow template name as a positional argument: `riff new bun`
-	if !templateExplicit && len(positional) > 0 {
+	// Template name as a positional argument: `riff new bun`
+	if len(positional) > 0 {
 		templateName = positional[0]
-		templateExplicit = true
 	}
 
 	// --- Interactive template picker ---
-	// When no --template was given, no --run was given, and stdin is a TTY,
+	// When no template was given, no --run was given, and stdin is a TTY,
 	// show an interactive picker so the user can choose a template.
-	if !templateExplicit && runCmd == "" && internal.IsInteractive() {
+	if templateName == "" && runCmd == "" && internal.IsInteractive() {
 		templates := internal.GetTemplates()
 		names := make([]string, 0, len(templates))
 		for k := range templates {

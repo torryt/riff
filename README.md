@@ -36,7 +36,7 @@ riff <command> [options]
 
 | Command | Description |
 |---|---|
-| `riff new [-t <template>]` | Create a fresh project (optional `-t`/`--template`, otherwise interactive picker) |
+| `riff new [template]` | Create a fresh project (pass template name or use interactive picker) |
 | `riff list` (or `ls`) | List all projects with descriptions |
 | `riff open [id]` | Open a project (interactive picker if no ID) |
 | `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
@@ -64,14 +64,14 @@ riff clean
 
 ```bash
 riff new                        # interactive picker (or empty folder + git)
-riff new -t bun                 # bun init
-riff new -t dotnet              # dotnet new console
-riff new -t react               # create-vite react-ts
-riff new -t python              # uv init
-riff new -t rust                # cargo init
-riff new -t go                  # go mod init temp
-riff new -t node                # npm init
-riff new -t next                # create-next-app
+riff new bun                 # bun init
+riff new dotnet              # dotnet new console
+riff new react               # create-vite react-ts
+riff new python              # uv init
+riff new rust                # cargo init
+riff new go                  # go mod init temp
+riff new node                # npm init
+riff new next                # create-next-app
 riff new --run "uv init"        # arbitrary init command
 riff new --no-git               # skip git init
 ```
