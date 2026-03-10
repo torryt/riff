@@ -18,7 +18,7 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 - [Configuration](#%EF%B8%8F-configuration)
   - [Initializing the config](#initializing-the-config)
   - [Config options](#config-options)
-  - [JSON schema](#json-schema)
+
 - [AI descriptions](#-ai-descriptions)
 - [Templates](#-templates)
   - [Custom templates](#custom-templates)
@@ -115,18 +115,13 @@ riff is configured via a JSON file at `~/.riff/config.json`. All settings are op
 
 ### Initializing the config
 
-Generate a starter config file with the built-in JSON schema for editor autocompletion:
+Generate a starter config file:
 
 ```bash
 riff config init
 ```
 
-This creates two files in `~/.riff/`:
-
-| File | Purpose |
-|---|---|
-| `config.json` | Your configuration (edit this) |
-| `config.schema.json` | JSON schema for editor validation and autocompletion |
+This creates `~/.riff/config.json`.
 
 To print the config file path (useful in scripts):
 
@@ -138,7 +133,6 @@ riff config path
 
 | Key | Type | Default | Description |
 |---|---|---|---|
-| `$schema` | `string` | — | Path or URL to the JSON schema. Set automatically by `riff config init`. |
 | `ai_provider` | `string` | `""` (auto-detect) | Preferred AI provider for project descriptions. Valid values: `"claude"`, `"copilot"`, or `""`. When empty, riff auto-detects (Claude Code preferred). Falls back to auto-detection if the chosen provider is not in `$PATH`. |
 | `templates` | `object` | `{}` | Custom project templates. Each key is a template name used with `riff new <name>`. Templates with the same name as a built-in override it. See [Custom templates](#custom-templates). |
 | `templates.<name>.command` | `string` | — | Shell command to initialize the project. Runs via `sh -c` in the new project directory. |
@@ -147,7 +141,6 @@ riff config path
 
 ```json
 {
-  "$schema": "./config.schema.json",
   "ai_provider": "copilot",
   "templates": {
     "python": { "command": "python -m venv .venv && pip install pytest" },
@@ -156,12 +149,6 @@ riff config path
   }
 }
 ```
-
-### JSON schema
-
-The config file has a [JSON schema](cmd/config.schema.json) that provides autocompletion and validation in editors that support it (VS Code, JetBrains, Neovim with LSP, etc.).
-
-Run `riff config init` to write both the config and schema files, or copy the schema manually from the repository.
 
 ## 🤖 AI descriptions
 
@@ -180,7 +167,7 @@ To pin a specific provider, set [`ai_provider`](#config-options) in your config.
 
 ### No provider installed?
 
-No problem. riff works fine without one — descriptions are simply skipped, and you'll see a friendly note when it would have generated them.
+No problem. riff works fine without one — descriptions are simply skipped.
 
 ## 🎨 Templates
 

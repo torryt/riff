@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"embed"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -9,9 +8,6 @@ import (
 
 	"github.com/torryt/riff/internal"
 )
-
-//go:embed config.schema.json
-var configSchema embed.FS
 
 // RunConfig handles the "config" command group.
 // Subcommands:
@@ -54,21 +50,9 @@ func runConfigInit() {
 		os.Exit(1)
 	}
 
-	// Write the schema file next to the config.
-	schemaPath := filepath.Join(filepath.Dir(configPath), "config.schema.json")
-	schemaData, err := configSchema.ReadFile("config.schema.json")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s could not read embedded schema: %s\n", internal.Red("Error:"), err)
-		os.Exit(1)
-	}
-	if err := os.WriteFile(schemaPath, schemaData, 0o644); err != nil {
-		fmt.Fprintf(os.Stderr, "%s could not write schema file: %s\n", internal.Red("Error:"), err)
-		os.Exit(1)
-	}
-
-	// Build default config with schema reference.
+	// Build default config with remote schema reference.
 	cfg := internal.UserConfig{
-		Schema: "./config.schema.json",
+		Schema: "https://raw.githubusercontent.com/torryt/riff/main/cmd/config.schema.json",
 	}
 
 	data, err := json.MarshalIndent(cfg, "", "  ")
@@ -83,5 +67,4 @@ func runConfigInit() {
 	}
 
 	fmt.Printf("%s Created %s\n", internal.Green("✓"), configPath)
-	fmt.Printf("  Schema written to %s\n", schemaPath)
 }

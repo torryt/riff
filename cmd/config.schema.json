@@ -6,7 +6,7 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "description": "Path or URL to the JSON schema for editor validation."
+      "description": "URL to the JSON schema for editor validation."
     },
     "ai_provider": {
       "type": "string",
