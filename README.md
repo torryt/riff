@@ -26,6 +26,7 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 - 🆕 **Create** isolated projects in one command — any language, any framework
 - 📋 **List** all your projects with AI-generated descriptions
 - 📂 **Open** projects interactively or by ID
+- 📤 **Export** a project to any local folder when you're ready to ship it
 - 🧹 **Clean** up projects individually or in bulk (Marie Kondo mode included)
 - 🤖 **Auto-describe** projects via GitHub Copilot CLI — because you *will* forget what this one does
 - 🌍 **Framework-agnostic** — Bun, Python, Rust, Go, Node, React, Next.js, or just an empty folder
@@ -55,6 +56,7 @@ riff <command> [options]
 | `riff list` (or `ls`) | List all projects with descriptions |
 | `riff open [id]` | Open a project (interactive picker if no ID) |
 | `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
+| `riff export <folder> [id]` | Export a project to a local folder (interactive picker if no ID) |
 | `riff init [shell]` | Shell setup for auto-cd (auto-detects shell) |
 | `riff update-docs` | Regenerate descriptions for all projects |
 | `riff help` | Show help |
@@ -73,6 +75,9 @@ riff open
 
 # Marie Kondo the ones that no longer spark joy
 riff clean
+
+# Graduate a prototype to a real project
+riff export ~/code/my-new-thing
 ```
 
 ### Flags for `new`
