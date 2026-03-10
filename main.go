@@ -3,13 +3,25 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/torryt/riff/cmd"
 	"github.com/torryt/riff/internal"
 )
 
 // version is set at build time via -ldflags "-X main.version=..."
+// When installed via `go install`, it falls back to the module version.
 var version = "dev"
+
+func getVersion() string {
+	if version != "dev" {
+		return version
+	}
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" && info.Main.Version != "(devel)" {
+		return info.Main.Version
+	}
+	return version
+}
 
 func main() {
 	args := os.Args[1:]
@@ -42,7 +54,7 @@ func main() {
 	case "":
 		cmd.RunNew(args)
 	case "version", "--version", "-v":
-		fmt.Println("riff " + version)
+		fmt.Println("riff " + getVersion())
 	case "help", "--help", "-h":
 		printHelp()
 	default:
