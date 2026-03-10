@@ -84,7 +84,7 @@ func RunNew(args []string) {
 
 	// --- Generate project ID and create directory ---
 	id := internal.GenerateID(7)
-	projectPath := filepath.Join(internal.RiffDir, id)
+	projectPath := filepath.Join(internal.ProjectsDir, id)
 
 	if err := os.MkdirAll(projectPath, 0755); err != nil {
 		fmt.Fprintln(os.Stderr, internal.Red("Error: could not create project directory: "+err.Error()))

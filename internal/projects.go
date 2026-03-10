@@ -31,18 +31,18 @@ type packageJSON struct {
 	Description string `json:"description"`
 }
 
-// EnsureRiffDir creates ~/.riff/ (and any parents) if it does not exist.
+// EnsureRiffDir creates ~/.riff/ and ~/.riff/projects/ if they do not exist.
 func EnsureRiffDir() error {
-	return os.MkdirAll(RiffDir, 0o755)
+	return os.MkdirAll(ProjectsDir, 0o755)
 }
 
-// GetProjects reads all project directories inside RiffDir and returns a
+// GetProjects reads all project directories inside ProjectsDir and returns a
 // sorted slice of ProjectInfo. Hidden entries (names starting with ".") are
 // skipped. For each project directory the function first tries to read
 // .riff.json; if that is absent it falls back to package.json for the
 // description field.
 func GetProjects() ([]ProjectInfo, error) {
-	entries, err := os.ReadDir(RiffDir)
+	entries, err := os.ReadDir(ProjectsDir)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil
@@ -64,7 +64,7 @@ func GetProjects() ([]ProjectInfo, error) {
 			continue
 		}
 
-		projectPath := filepath.Join(RiffDir, name)
+		projectPath := filepath.Join(ProjectsDir, name)
 		info := ProjectInfo{
 			ID:   name,
 			Path: projectPath,

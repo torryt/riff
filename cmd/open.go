@@ -88,7 +88,7 @@ func RunOpen(args []string) {
 		return
 	}
 
-	projectPath := filepath.Join(internal.RiffDir, selectedID)
+	projectPath := filepath.Join(internal.ProjectsDir, selectedID)
 
 	fmt.Printf("  %s %s\n", internal.Green(">"), internal.Bold(internal.Cyan(selectedID)))
 
