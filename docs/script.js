@@ -49,7 +49,7 @@ const terminals = {
     { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">riff</span> <span class="flag">new react</span>' },
     { type: 'output', html: '<span class="highlight">Created</span> project <span class="id">a7x9k2m</span> with template react' },
     { type: 'output', html: '<span class="output">Initialized git repository</span>' },
-    { type: 'output', html: '<span class="output">Running:</span> bunx create-vite . --template react-ts' },
+    { type: 'output', html: '<span class="output">Running:</span> pnpx create-vite . --template react-ts' },
     { type: 'blank' },
     { type: 'output', html: '<span class="highlight">Done!</span> <span class="output">Project ready at</span> <span class="id">~/.riff/projects/a7x9k2m/</span>' },
     { type: 'cursor' },

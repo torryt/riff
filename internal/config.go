@@ -52,13 +52,13 @@ type Template struct {
 // BuiltinTemplates are always available, compiled into the binary.
 var BuiltinTemplates = map[string]Template{
 	"bun":    {Command: "bun init -y"},
-	"react":  {Command: "bunx create-vite . --template react-ts"},
+	"react":  {Command: "pnpx create-vite . --template react-ts"},
 	"python": {Command: "uv init"},
 	"rust":   {Command: "cargo init ."},
 	"node":   {Command: "npm init -y"},
 	"dotnet": {Command: "dotnet new console"},
 	"go":     {Command: "go mod init temp"},
-	"next":   {Command: "bunx create-next-app . --ts --eslint --app --use-bun"},
+	"next":   {Command: "pnpx create-next-app . --ts --eslint --app"},
 }
 
 // UserConfig represents the optional ~/.riff/config.json file.

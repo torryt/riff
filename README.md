@@ -153,7 +153,7 @@ riff config path
   "templates": {
     "python": { "command": "python -m venv .venv && pip install pytest" },
     "django": { "command": "uv init && uv pip install django && django-admin startproject app ." },
-    "svelte": { "command": "bunx create-vite . --template svelte-ts" }
+    "svelte": { "command": "pnpx create-vite . --template svelte-ts" }
   }
 }
 ```
@@ -185,12 +185,12 @@ riff ships with built-in templates that Just Work™:
 | -------- | -------------------------------------------------------- |
 | `bun`    | `bun init -y`                                            |
 | `dotnet` | `dotnet new console`                                     |
-| `react`  | `bunx create-vite . --template react-ts`                 |
+| `react`  | `pnpx create-vite . --template react-ts`                 |
 | `python` | `uv init`                                                |
 | `rust`   | `cargo init .`                                           |
 | `node`   | `npm init -y`                                            |
 | `go`     | `go mod init temp`                                       |
-| `next`   | `bunx create-next-app . --ts --eslint --app --use-bun`   |
+| `next`   | `pnpx create-next-app . --ts --eslint --app`             |
 
 ### Custom templates
 
@@ -201,7 +201,7 @@ Override built-ins or add your own via the `templates` key in `~/.riff/config.js
   "templates": {
     "python": { "command": "python -m venv .venv && pip install pytest" },
     "django": { "command": "uv init && uv pip install django && django-admin startproject app ." },
-    "svelte": { "command": "bunx create-vite . --template svelte-ts" }
+    "svelte": { "command": "pnpx create-vite . --template svelte-ts" }
   }
 }
 ```
