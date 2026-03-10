@@ -20,9 +20,29 @@ jobs:
       - name: Test report
         if: always()
         run: |
-          echo "### Test Results" >> "$GITHUB_STEP_SUMMARY"
+          passed=$(grep -c '^--- PASS:' test-output.txt || true)
+          failed=$(grep -c '^--- FAIL:' test-output.txt || true)
+          total=$((passed + failed))
+
+          if [ "$failed" -gt 0 ]; then
+            echo "### ❌ Test Results" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### ✅✨ Test Results" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Status | Count |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|--------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ✅ Passed | $passed |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ❌ Failed | $failed |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Total** | **$total** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "<details><summary>Test details</summary>" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-          grep -E '^\s*(---|=== RUN|PASS|FAIL|ok)' test-output.txt >> "$GITHUB_STEP_SUMMARY"
+          grep -E '^(--- (PASS|FAIL):|ok |FAIL\s)' test-output.txt >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "</details>" >> "$GITHUB_STEP_SUMMARY"
 
       - run: go build -o /dev/null .
