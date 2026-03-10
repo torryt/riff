@@ -12,11 +12,65 @@ import (
 
 const describePrompt = "Describe this project's contents and theme in exactly 7-8 words. Reply with ONLY the description, nothing else."
 
-// GenerateDescription runs the copilot CLI inside projectPath and returns a
+// ErrNoLLM is returned when no supported LLM CLI tool is installed.
+var ErrNoLLM = errors.New("no supported LLM tool found")
+
+var (
+	llmProviderOnce  sync.Once
+	llmProviderCache string
+)
+
+// llmProvider returns the name of the first available LLM CLI tool,
+// or an empty string when none is installed. The detection result is
+// cached after the first call.
+func llmProvider() string {
+	llmProviderOnce.Do(func() {
+		// Honour explicit config preference.
+		if pref := ConfiguredAIProvider(); pref != "" {
+			if _, err := exec.LookPath(pref); err == nil {
+				llmProviderCache = pref
+				return
+			}
+		}
+		// Auto-detect: prefer Claude Code, then Copilot.
+		for _, name := range []string{"claude", "copilot"} {
+			if _, err := exec.LookPath(name); err == nil {
+				llmProviderCache = name
+				return
+			}
+		}
+	})
+	return llmProviderCache
+}
+
+// HasLLM reports whether any supported LLM CLI tool is available.
+func HasLLM() bool {
+	return llmProvider() != ""
+}
+
+// LLMProvider returns the name of the active LLM provider (e.g. "claude",
+// "copilot") or an empty string when none is available.
+func LLMProvider() string {
+	return llmProvider()
+}
+
+// GenerateDescription runs an LLM CLI tool inside projectPath and returns a
 // short description of the project. It returns an empty string and a non-nil
 // error when generation fails or the result does not pass basic validation.
+// It returns ErrNoLLM when no supported LLM tool is installed.
 func GenerateDescription(projectPath string) (string, error) {
-	cmd := exec.Command("copilot", "--model", "claude-haiku-4.5", "-sp", describePrompt)
+	provider := llmProvider()
+	if provider == "" {
+		return "", ErrNoLLM
+	}
+
+	var cmd *exec.Cmd
+	switch provider {
+	case "claude":
+		cmd = exec.Command("claude", "-p", "--model", "haiku", "--no-session-persistence", describePrompt)
+	default: // "copilot"
+		cmd = exec.Command("copilot", "--model", "claude-haiku-4.5", "-sp", describePrompt)
+	}
 	cmd.Dir = projectPath
 
 	var stdout bytes.Buffer
@@ -25,7 +79,7 @@ func GenerateDescription(projectPath string) (string, error) {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		return "", fmt.Errorf("copilot command failed: %w (stderr: %s)", err, stderr.String())
+		return "", fmt.Errorf("%s command failed: %w (stderr: %s)", provider, err, stderr.String())
 	}
 
 	// Take the last non-empty line from stdout.
@@ -40,7 +94,7 @@ func GenerateDescription(projectPath string) (string, error) {
 	}
 
 	if description == "" {
-		return "", errors.New("copilot returned no output")
+		return "", fmt.Errorf("%s returned no output", provider)
 	}
 
 	// Strip surrounding quotes (single or double).
@@ -78,13 +132,22 @@ func BackfillDescriptions(projects []ProjectInfo, timeout time.Duration) {
 		return
 	}
 
+	// No LLM available — bail early with a friendly notice.
+	if llmProvider() == "" {
+		fmt.Printf("  %s %s\n",
+			Dim("~"),
+			Dim("No AI helper found — install Claude Code or Copilot, or set \"ai_provider\" in ~/.riff/config.json"),
+		)
+		return
+	}
+
 	// Show a brief status line.
 	noun := "description"
 	if len(missing) > 1 {
 		noun = "descriptions"
 	}
-	statusMsg := fmt.Sprintf("  %s Generating %d %s…",
-		Dim("~"), len(missing), noun)
+	statusMsg := fmt.Sprintf("  %s Generating %d %s %s",
+		Dim("~"), len(missing), noun, Dim("via "+llmProvider()))
 	fmt.Print(statusMsg)
 
 	type result struct {

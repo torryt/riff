@@ -3,10 +3,13 @@ package internal
 import (
 	"crypto/rand"
 	"encoding/json"
+	"fmt"
+	"math"
 	"math/big"
 	"os"
 	"path/filepath"
 	"sort"
+	"time"
 )
 
 // ProjectInfo holds summary information about a single riff-managed project.
@@ -154,4 +157,45 @@ func WriteMetadata(projectPath string, meta ProjectMetadata) error {
 
 	metaPath := filepath.Join(projectPath, MetadataFile)
 	return os.WriteFile(metaPath, data, 0o644)
+}
+
+// FormatAge returns a human-readable relative time string for an ISO 8601
+// timestamp. If the timestamp is empty or unparseable it returns "unknown".
+func FormatAge(iso string) string {
+	if iso == "" {
+		return "unknown"
+	}
+	t, err := time.Parse(time.RFC3339, iso)
+	if err != nil {
+		return "unknown"
+	}
+
+	dur := time.Since(t)
+	if dur < 0 {
+		return "just now"
+	}
+
+	seconds := int(math.Floor(dur.Seconds()))
+	minutes := int(math.Floor(dur.Minutes()))
+	hours := int(math.Floor(dur.Hours()))
+	days := hours / 24
+
+	switch {
+	case seconds < 60:
+		return "just now"
+	case minutes == 1:
+		return "1 minute ago"
+	case minutes < 60:
+		return fmt.Sprintf("%d minutes ago", minutes)
+	case hours == 1:
+		return "1 hour ago"
+	case hours < 24:
+		return fmt.Sprintf("%d hours ago", hours)
+	case days == 1:
+		return "1 day ago"
+	case days < 30:
+		return fmt.Sprintf("%d days ago", days)
+	default:
+		return t.Format("Jan 02, 2006")
+	}
 }
