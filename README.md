@@ -41,6 +41,14 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 **Prerequisites:**
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli) for auto-generated descriptions (optional, but your future self will thank you)
 
+**Homebrew (macOS/Linux):**
+
+```bash
+brew install torryt/tap/riff
+```
+
+**Go:**
+
 ```bash
 go install github.com/torryt/riff@latest
 ```

@@ -39,6 +39,19 @@ changelog:
       - "^test:"
       - "^ci:"
 
+brews:
+  - repository:
+      owner: torryt
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: "https://github.com/torryt/riff"
+    description: "Disposable, throwaway project workspaces"
+    license: "MIT"
+    install: |
+      bin.install "riff"
+    test: |
+      system "#{bin}/riff", "version"
+
 release:
   github:
     owner: torryt
