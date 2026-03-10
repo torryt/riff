@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/charmbracelet/huh"
-	"github.com/torry/riff/internal"
+	"github.com/torryt/riff/internal"
 )
 
 // RunOpen handles the `riff open [id]` command.

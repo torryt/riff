@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/torry/riff/internal"
+	"github.com/torryt/riff/internal"
 )
 
 // RunUpdateDocs regenerates descriptions for all riff-managed projects.

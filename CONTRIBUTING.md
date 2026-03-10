@@ -6,7 +6,7 @@ First off — thanks for wanting to contribute to a tool for managing *temporary
 
 ```bash
 # Clone the repo
-git clone https://github.com/torry/riff.git
+git clone https://github.com/torryt/riff.git
 cd riff
 
 # Build it
@@ -71,7 +71,7 @@ package cmd
 
 import (
     "fmt"
-    "github.com/torry/riff/internal"
+    "github.com/torryt/riff/internal"
 )
 
 func RunMyCoolCommand(args []string) {

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/torry/riff/internal"
+	"github.com/torryt/riff/internal"
 )
 
 // RunList prints a table of all riff-managed projects.
