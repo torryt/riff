@@ -1,6 +1,29 @@
+// ── Install tab state ─────────────────────────────
+let activeInstallTab = 'brew';
+
+const installCommands = {
+  brew: 'brew install torryt/tap/riff',
+  go: 'go install github.com/torryt/riff@latest',
+};
+
+function switchInstallTab(tab) {
+  activeInstallTab = tab;
+  document.querySelectorAll('.install-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  document.querySelectorAll('.install-text').forEach(el => {
+    el.textContent = el.dataset[tab];
+  });
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.install-tab-btn');
+  if (btn) switchInstallTab(btn.dataset.tab);
+});
+
 // ── Copy install command ──────────────────────────
 function copyInstall() {
-  navigator.clipboard.writeText('go install github.com/torryt/riff@latest');
+  navigator.clipboard.writeText(installCommands[activeInstallTab]);
   const tip = document.getElementById('copyTooltip');
   tip.classList.add('show');
   setTimeout(() => tip.classList.remove('show'), 1500);
@@ -50,7 +73,7 @@ const terminals = {
     { type: 'cursor' },
   ],
   'cta-install': [
-    { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">go install</span> <span class="output">github.com/torryt/riff@latest</span>' },
+    { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">brew install</span> <span class="output">torryt/tap/riff</span>' },
     { type: 'blank' },
     { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">riff</span> <span class="flag">new python</span>' },
     { type: 'output', html: '<span class="highlight">Created</span> project <span class="id">f4kq7n2</span> with template python' },

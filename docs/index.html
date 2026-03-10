@@ -41,13 +41,19 @@
         Throwaway projects for every language, without the existential dread of naming them. Spin up, experiment, clean up. Or don't.
       </p>
       <div class="hero-actions">
-        <div class="install-cmd" onclick="copyInstall()" role="button" tabindex="0" aria-label="Copy install command">
-          <span class="prompt">$</span>
-          <span>go install github.com/torryt/riff@latest</span>
-          <span class="copy-icon" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          </span>
-          <span class="tooltip" id="copyTooltip">Copied!</span>
+        <div class="install-tabs">
+          <div class="install-tab-buttons">
+            <button class="install-tab-btn active" data-tab="brew">Homebrew</button>
+            <button class="install-tab-btn" data-tab="go">Go</button>
+          </div>
+          <div class="install-cmd" onclick="copyInstall()" role="button" tabindex="0" aria-label="Copy install command">
+            <span class="prompt">$</span>
+            <span class="install-text" data-brew="brew install torryt/tap/riff" data-go="go install github.com/torryt/riff@latest">brew install torryt/tap/riff</span>
+            <span class="copy-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </span>
+            <span class="tooltip" id="copyTooltip">Copied!</span>
+          </div>
         </div>
         <a href="https://github.com/torryt/riff/releases" class="hero-link" target="_blank" rel="noopener">or grab a binary &rarr;</a>
       </div>
@@ -249,10 +255,16 @@
           <div class="terminal-body"></div>
         </div>
       </div>
-      <button class="cta-install" onclick="copyInstall()">
-        <span>go install github.com/torryt/riff@latest</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-      </button>
+      <div class="install-tabs install-tabs--cta">
+        <div class="install-tab-buttons">
+          <button class="install-tab-btn active" data-tab="brew">Homebrew</button>
+          <button class="install-tab-btn" data-tab="go">Go</button>
+        </div>
+        <button class="cta-install" onclick="copyInstall()">
+          <span class="install-text" data-brew="brew install torryt/tap/riff" data-go="go install github.com/torryt/riff@latest">brew install torryt/tap/riff</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
