@@ -43,6 +43,8 @@ func main() {
 		cmd.RunClean(args)
 	case "init":
 		cmd.RunInit(args)
+	case "export":
+		cmd.RunExport(args)
 	case "update-docs":
 		cmd.RunUpdateDocs(args)
 	case "_update-single":
@@ -80,6 +82,7 @@ func printHelp() {
 	fmt.Printf("    %-20s %s\n", internal.Green("list")+internal.Dim(", ls"), "List all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("open")+" "+internal.Dim("[id]"), "Open a project (picks from list if no ID)")
 	fmt.Printf("    %-20s %s\n", internal.Green("clean")+" "+internal.Dim("[id]"), "Delete projects")
+	fmt.Printf("    %-20s %s\n", internal.Green("export")+" "+internal.Dim("<folder> [id]"), "Export a project to a local folder")
 	fmt.Printf("    %-20s %s\n", internal.Green("init")+" "+internal.Dim("[shell]"), "Shell setup for auto-cd (auto-detects shell)")
 	fmt.Printf("    %-20s %s\n", internal.Green("update-docs"), "Regenerate descriptions for all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("help"), "Show this help message")
