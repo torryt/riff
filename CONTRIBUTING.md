@@ -50,6 +50,7 @@ riff/
 │   ├── list.go          # 📋 riff list
 │   ├── open.go          # 📂 riff open
 │   ├── clean.go         # 🧹 riff clean
+│   ├── init.go          # 🐚 riff init (shell integration)
 │   └── update_docs.go   # 🤖 riff update-docs
 ├── .goreleaser.yml      # 📦 Cross-platform release config
 ├── .gitignore

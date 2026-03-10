@@ -96,4 +96,11 @@ func RunOpen(args []string) {
 		fmt.Fprintf(os.Stderr, "  %s Failed to write cd-path: %v\n", internal.Red("x"), err)
 		os.Exit(1)
 	}
+
+	if !internal.HasShellWrapper() {
+		fmt.Printf("\n  %s %s\n",
+			internal.Dim("To auto-cd into projects, add to your shell config:"),
+			internal.Cyan("eval \"$(riff init)\""),
+		)
+	}
 }

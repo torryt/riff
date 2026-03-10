@@ -26,6 +26,8 @@ func main() {
 		cmd.RunOpen(args)
 	case "clean", "rm":
 		cmd.RunClean(args)
+	case "init":
+		cmd.RunInit(args)
 	case "update-docs":
 		cmd.RunUpdateDocs(args)
 	case "_update-single":
@@ -34,7 +36,9 @@ func main() {
 		if len(args) > 0 {
 			_, _ = internal.UpdateProjectDescription(args[0])
 		}
-	case "help", "--help", "-h", "":
+	case "":
+		cmd.RunNew(args)
+	case "help", "--help", "-h":
 		printHelp()
 	default:
 		fmt.Fprintf(os.Stderr, "%s unknown command %q\n\n", internal.Red("Error:"), command)
@@ -49,10 +53,11 @@ func printHelp() {
 	fmt.Printf("  %s  %s %s\n\n", internal.Bold("Usage:"), internal.Cyan("riff"), "<command> [options]")
 
 	fmt.Printf("  %s\n", internal.Bold("Commands:"))
-	fmt.Printf("    %-20s %s\n", internal.Green("new"), "Create a new project")
+	fmt.Printf("    %-20s %s\n", internal.Green("new")+" "+internal.Dim("(default)"), "Create a new project")
 	fmt.Printf("    %-20s %s\n", internal.Green("list")+internal.Dim(", ls"), "List all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("open")+" "+internal.Dim("[id]"), "Open a project (picks from list if no ID)")
 	fmt.Printf("    %-20s %s\n", internal.Green("clean")+" "+internal.Dim("[id]"), "Delete projects")
+	fmt.Printf("    %-20s %s\n", internal.Green("init")+" "+internal.Dim("[shell]"), "Shell setup for auto-cd (auto-detects shell)")
 	fmt.Printf("    %-20s %s\n", internal.Green("update-docs"), "Regenerate descriptions for all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("help"), "Show this help message")
 

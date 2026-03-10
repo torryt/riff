@@ -40,6 +40,7 @@ riff <command> [options]
 | `riff list` (or `ls`) | List all projects with descriptions |
 | `riff open [id]` | Open a project (interactive picker if no ID) |
 | `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
+| `riff init [shell]` | Shell setup for auto-cd (auto-detects shell) |
 | `riff update-docs` | Regenerate descriptions for all projects |
 | `riff help` | Show help |
 
@@ -113,43 +114,22 @@ User entries with the same name as a built-in override it. Your config, your rul
 
 ## 🐚 Shell integration
 
-`riff open` and `riff new` write the project path to `~/.riff/.cd-path`. To automatically `cd` into the project after the command exits, add a shell wrapper. Copy-paste and forget about it — the best kind of config.
+`riff new` and `riff open` automatically `cd` into the project directory — but only if you set up the shell hook. Add one line to your shell config:
 
 ### Bash / Zsh
 
 Add to `~/.bashrc` or `~/.zshrc`:
 
 ```sh
-riff() {
-  command riff "$@"
-  local cd_path="$HOME/.riff/.cd-path"
-  if [ -f "$cd_path" ]; then
-    local target
-    target=$(cat "$cd_path")
-    rm -f "$cd_path"
-    if [ -n "$target" ] && [ -d "$target" ]; then
-      cd "$target" || return
-    fi
-  fi
-}
+eval "$(riff init)"
 ```
 
 ### Fish
 
-Add to `~/.config/fish/functions/riff.fish`:
+Add to `~/.config/fish/config.fish`:
 
 ```fish
-function riff
-    command riff $argv
-    set -l cd_path "$HOME/.riff/.cd-path"
-    if test -f "$cd_path"
-        set -l target (cat "$cd_path")
-        rm -f "$cd_path"
-        if test -n "$target" -a -d "$target"
-            cd "$target"
-        end
-    end
-end
+riff init fish | source
 ```
 
 ## 🤝 Contributing
