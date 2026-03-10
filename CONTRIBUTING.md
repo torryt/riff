@@ -41,8 +41,11 @@ riff/
 ├── go.mod
 ├── internal/
 │   ├── config.go        # 📌 Constants, config loading, template registry
+│   ├── config_test.go   # ✅ Tests for config & templates
 │   ├── projects.go      # 📦 Project listing, ID generation, metadata read/write
-│   ├── describe.go      # 🤖 LLM subprocess calls (Copilot CLI)
+│   ├── projects_test.go # ✅ Tests for projects, IDs, metadata
+│   ├── describe.go      # 🤖 LLM subprocess calls (Claude Code / Copilot)
+│   ├── describe_test.go # ✅ Tests for LLM disabling
 │   ├── colors.go        # 🎨 ANSI color helpers (respects NO_COLOR)
 │   └── prompt.go        # 🖥️ TTY detection
 ├── cmd/
@@ -50,6 +53,8 @@ riff/
 │   ├── list.go          # 📋 riff list
 │   ├── open.go          # 📂 riff open
 │   ├── clean.go         # 🧹 riff clean
+│   ├── export.go        # 📤 riff export
+│   ├── config.go        # ⚙️ riff config
 │   ├── init.go          # 🐚 riff init (shell integration)
 │   └── update_docs.go   # 🤖 riff update-docs
 ├── .goreleaser.yml      # 📦 Cross-platform release config
@@ -79,6 +84,19 @@ func RunMyCoolCommand(args []string) {
     fmt.Printf("  %s Did the cool thing\n", internal.Green("✓"))
 }
 ```
+
+## 🧪 Running tests
+
+```bash
+go test ./...
+```
+
+Tests are fully isolated — they never touch `~/.riff`. Two environment variables make this possible:
+
+- **`RIFF_HOME`** — overrides `~/.riff` as the root data directory. Tests point this at `t.TempDir()`.
+- **`RIFF_NO_AI`** — set to `1` to disable LLM detection. Prevents tests (and CI) from calling Claude/Copilot.
+
+If you're adding a new feature that touches the filesystem, use the `setupTestRiffHome(t)` helper in `internal/projects_test.go` — it sets both env vars and re-initialises paths for you.
 
 ## 📐 Code style & conventions
 
@@ -111,7 +129,7 @@ We're pretty open-minded, but "rewrite it in Rust" will be politely declined. We
 
 - **All project data lives in `~/.riff/`** — each project gets its own subdirectory with a random 7-character ID
 - **Metadata lives in `.riff.json`** inside each project directory (not `package.json` — we're language-agnostic now)
-- **`GenerateDescription()` in `internal/describe.go`** calls GitHub Copilot CLI under the hood — keep this in mind if you're working offline
+- **`GenerateDescription()` in `internal/describe.go`** calls Claude Code or Copilot CLI under the hood — keep this in mind if you're working offline. Set `RIFF_NO_AI=1` to disable.
 - **The post-commit hook** (`cmd/new.go`) auto-updates descriptions after each commit in a riff project
 - **Templates are just shell commands** — adding one is literally adding a line to a Go map in `internal/config.go`
 
