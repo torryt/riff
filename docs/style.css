@@ -222,6 +222,52 @@ nav .nav-links .gh-btn svg {
   animation: fadeUp 1s var(--ease-out) 0.8s forwards;
 }
 
+/* ── Install Tabs ──────────────────────────────────── */
+.install-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.install-tab-buttons {
+  display: flex;
+  gap: 0;
+}
+.install-tab-btn {
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: 0.02em;
+}
+.install-tab-btn:hover {
+  color: var(--text-dim);
+}
+.install-tab-btn.active {
+  color: var(--amber);
+  background: var(--surface);
+  border-color: var(--border);
+}
+.install-tabs .install-cmd {
+  border-radius: 0 8px 8px 8px;
+}
+.install-tabs--cta {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+}
+.install-tabs--cta .install-tab-buttons {
+  align-self: flex-start;
+}
+.install-tabs--cta .cta-install {
+  border-radius: 0 8px 8px 8px;
+}
+
 .install-cmd {
   display: flex;
   align-items: center;
