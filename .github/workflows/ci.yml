@@ -14,6 +14,15 @@ jobs:
 
       - run: go vet ./...
 
-      - run: go test ./...
+      - name: Run tests
+        run: go test -v ./... 2>&1 | tee test-output.txt
+
+      - name: Test report
+        if: always()
+        run: |
+          echo "### Test Results" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          grep -E '^\s*(---|=== RUN|PASS|FAIL|ok)' test-output.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - run: go build -o /dev/null .
