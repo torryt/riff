@@ -2,8 +2,10 @@ package internal
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var (
@@ -79,6 +81,88 @@ func LoadConfig() UserConfig {
 		return UserConfig{}
 	}
 	return cfg
+}
+
+// DetectShell returns the shell name from the SHELL env var (e.g. "bash", "zsh", "fish").
+// Returns empty string if SHELL is unset or unrecognised.
+func DetectShell() string {
+	shell := filepath.Base(os.Getenv("SHELL"))
+	switch shell {
+	case "bash", "zsh", "fish":
+		return shell
+	}
+	return ""
+}
+
+// EnsureShellWrapper checks whether the shell wrapper is active and, if not,
+// appends the appropriate `riff init` line to the user's shell config file.
+func EnsureShellWrapper(projectPath string) {
+	if HasShellWrapper() {
+		return
+	}
+
+	shell := DetectShell()
+	if shell == "" {
+		fmt.Printf("\n  %s %s\n",
+			Dim("To auto-cd into projects, add to your shell config:"),
+			Cyan("eval \"$(riff init)\""),
+		)
+		return
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return
+	}
+
+	var configFile string
+	var initLine string
+	switch shell {
+	case "bash":
+		configFile = filepath.Join(home, ".bashrc")
+		initLine = `eval "$(riff init)"`
+	case "zsh":
+		configFile = filepath.Join(home, ".zshrc")
+		initLine = `eval "$(riff init)"`
+	case "fish":
+		configFile = filepath.Join(home, ".config", "fish", "config.fish")
+		initLine = "riff init fish | source"
+	}
+
+	data, err := os.ReadFile(configFile)
+	if err != nil && !os.IsNotExist(err) {
+		return
+	}
+
+	relPath := "~/" + strings.TrimPrefix(configFile, home+"/")
+
+	if strings.Contains(string(data), "riff init") {
+		// Already installed but not active in current session.
+		fmt.Printf("\n  %s\n",
+			Dim("To activate auto-cd, run: "+Cyan("source "+relPath+" && cd "+projectPath)),
+		)
+		return
+	}
+
+	f, err := os.OpenFile(configFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
+	line := "\n" + initLine + "\n"
+	if _, err := f.WriteString(line); err != nil {
+		return
+	}
+
+	fmt.Printf("\n  %s Added %s to %s\n",
+		Green("+"),
+		Cyan(initLine),
+		Bold(relPath),
+	)
+	fmt.Printf("  %s\n",
+		Dim("To activate now, run: "+Cyan("source "+relPath+" && cd "+projectPath)),
+	)
 }
 
 // GetTemplates returns built-in templates merged with user overrides.
