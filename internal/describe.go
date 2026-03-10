@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 	"sync"
@@ -22,8 +23,12 @@ var (
 
 // llmProvider returns the name of the first available LLM CLI tool,
 // or an empty string when none is installed. The detection result is
-// cached after the first call.
+// cached after the first call. Setting RIFF_NO_AI=1 bypasses detection
+// and always returns an empty string.
 func llmProvider() string {
+	if os.Getenv("RIFF_NO_AI") == "1" {
+		return ""
+	}
 	llmProviderOnce.Do(func() {
 		// Honour explicit config preference.
 		if pref := ConfiguredAIProvider(); pref != "" {
