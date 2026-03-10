@@ -15,6 +15,7 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
   - [Quick start](#quick-start-)
   - [Flags for `new`](#flags-for-new)
 - [How it works](#-how-it-works)
+- [AI descriptions](#-ai-descriptions)
 - [Templates](#-templates)
   - [Custom templates](#custom-templates)
 - [Shell integration](#-shell-integration)
@@ -28,13 +29,13 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 - 📂 **Open** projects interactively or by ID
 - 📤 **Export** a project to any local folder when you're ready to ship it
 - 🧹 **Clean** up projects individually or in bulk (Marie Kondo mode included)
-- 🤖 **Auto-describe** projects via GitHub Copilot CLI — because you *will* forget what this one does
+- 🤖 **Auto-describe** projects via Claude Code or GitHub Copilot CLI — because you *will* forget what this one does
 - 🌍 **Framework-agnostic** — Bun, Python, Rust, Go, Node, React, Next.js, or just an empty folder
 
 ## 📦 Installation
 
 **Prerequisites:**
-- [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli) for auto-generated descriptions (optional, but your future self will thank you)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli) for auto-generated descriptions (optional, but your future self will thank you)
 
 ```bash
 go install github.com/torryt/riff@latest
@@ -99,9 +100,40 @@ riff new --no-git               # skip git init
 ## 🧠 How it works
 
 1. `riff new` creates a directory under `~/.riff/` with a random 7-char ID, optionally runs a template command, and sets up a git repo with a post-commit hook
-2. Every time you commit, the hook asks Copilot CLI to summarize your project in ~7 words (it's surprisingly good at this)
+2. Every time you commit, the hook asks your AI provider to summarize your project in ~7 words (it's surprisingly good at this)
 3. `riff list` shows all your projects with their descriptions — no more opening 14 folders to find the one with the WebSocket experiment
 4. `riff clean` lets you select and delete projects when the guilt of digital hoarding sets in
+
+## 🤖 AI descriptions
+
+riff uses an LLM CLI tool to auto-generate short project descriptions. It works out of the box — no config needed — and degrades gracefully if nothing is installed (you just won't get descriptions).
+
+### Supported providers
+
+| Provider | Binary | Detection priority |
+|---|---|---|
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | `claude` | 1st (preferred) |
+| [GitHub Copilot CLI](https://docs.github.com/en/copilot/github-copilot-in-the-cli) | `copilot` | 2nd |
+
+riff auto-detects whichever is available in your `$PATH`. If both are installed, Claude Code wins.
+
+### Choosing a provider
+
+To pin a specific provider, set `ai_provider` in `~/.riff/config.json`:
+
+```json
+{
+  "ai_provider": "copilot"
+}
+```
+
+Valid values: `"claude"`, `"copilot"`. Omit the key (or leave it `""`) to auto-detect.
+
+If the configured provider isn't found in `$PATH`, riff falls back to auto-detection.
+
+### No provider installed?
+
+No problem. riff works fine without one — descriptions are simply skipped, and you'll see a friendly note when it would have generated them.
 
 ## 🎨 Templates
 

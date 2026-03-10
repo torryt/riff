@@ -49,7 +49,15 @@ var BuiltinTemplates = map[string]Template{
 
 // UserConfig represents the optional ~/.riff/config.json file.
 type UserConfig struct {
-	Templates map[string]Template `json:"templates"`
+	Templates  map[string]Template `json:"templates"`
+	AIProvider string              `json:"ai_provider"`
+}
+
+// ConfiguredAIProvider returns the AI provider set in ~/.riff/config.json,
+// or an empty string when no preference is configured.
+func ConfiguredAIProvider() string {
+	cfg := LoadConfig()
+	return cfg.AIProvider
 }
 
 // LoadConfig reads ~/.riff/config.json if it exists, returns empty config otherwise.
