@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>riff — throwaway projects, zero regret</title>
+  <meta name="description" content="Throwaway projects for every language, without the existential dread of naming them.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎸</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient glow orbs -->
+  <div class="glow-orb glow-orb--amber"></div>
+  <div class="glow-orb glow-orb--orange"></div>
+
+  <!-- ── Nav ──────────────────────────────────────────── -->
+  <nav>
+    <div class="logo"><span>r</span>iff</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#templates">Templates</a>
+      <a href="https://github.com/torryt/riff" class="gh-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">open source CLI tool</div>
+      <h1>Hack first,<br>name <em>later.</em></h1>
+      <p class="hero-sub">
+        Throwaway projects for every language, without the existential dread of naming them. Spin up, experiment, clean up. Or don't.
+      </p>
+      <div class="hero-actions">
+        <div class="install-cmd" onclick="copyInstall()" role="button" tabindex="0" aria-label="Copy install command">
+          <span class="prompt">$</span>
+          <span>go install github.com/torryt/riff@latest</span>
+          <span class="copy-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </span>
+          <span class="tooltip" id="copyTooltip">Copied!</span>
+        </div>
+        <a href="https://github.com/torryt/riff/releases" class="hero-link" target="_blank" rel="noopener">or grab a binary &rarr;</a>
+      </div>
+
+      <!-- Hero terminal: full demo -->
+      <div class="hero-terminal">
+        <div class="terminal" data-terminal="hero">
+          <div class="terminal-bar">
+            <div class="terminal-dot terminal-dot--red"></div>
+            <div class="terminal-dot terminal-dot--yellow"></div>
+            <div class="terminal-dot terminal-dot--green"></div>
+            <div class="terminal-title">~/.riff</div>
+            <div style="width:42px;"></div>
+          </div>
+          <div class="terminal-body"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ─────────────────────────────────────── -->
+  <section id="features">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Features</div>
+        <h2 class="section-heading">Everything a throwaway<br>project needs. Nothing it doesn't.</h2>
+        <p class="section-desc">
+          riff keeps disposable projects organized without making you think about it. Each one gets a random ID, a git repo, and an AI-generated description so future-you doesn't have to guess.
+        </p>
+      </div>
+      <div class="features-grid reveal">
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">+</span>
+          <h3>Instant create</h3>
+          <p>One command to scaffold a project in any language. Interactive template picker or pass it directly.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&gt;_</span>
+          <h3>Auto-describe</h3>
+          <p>Every commit triggers an AI summary. No more opening 14 folders to find the WebSocket experiment.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">~/</span>
+          <h3>Isolated sandbox</h3>
+          <p>All projects live in <code style="font-size:0.75rem;background:var(--surface);padding:0.1em 0.4em;border-radius:3px;">~/.riff/</code> with random IDs. Your home directory stays clean.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&uarr;</span>
+          <h3>Export & graduate</h3>
+          <p>When a throwaway becomes real, export it to any folder. Prototype to production in one command.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">&times;</span>
+          <h3>Bulk cleanup</h3>
+          <p>Marie Kondo mode: multi-select the projects that no longer spark joy and delete them all at once.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">$_</span>
+          <h3>Shell integration</h3>
+          <p>Auto-cd into projects. Works with bash, zsh, and fish. One line in your shell config.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it Works ─────────────────────────────────── -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-heading">Zero ceremony.<br>Maximum velocity.</h2>
+      </div>
+      <div class="steps reveal">
+        <!-- Step 01: Spin up -->
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h3>Spin up</h3>
+            <p>Pick a template or go empty. riff creates an isolated directory with a random 7-character ID, initializes git, and drops you in.</p>
+          </div>
+          <div class="step-terminal">
+            <div class="terminal terminal--compact" data-terminal="step-new">
+              <div class="terminal-bar">
+                <div class="terminal-dot terminal-dot--red"></div>
+                <div class="terminal-dot terminal-dot--yellow"></div>
+                <div class="terminal-dot terminal-dot--green"></div>
+                <div class="terminal-title">terminal</div>
+                <div style="width:42px;"></div>
+              </div>
+              <div class="terminal-body"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 02: Hack away -->
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h3>Hack away</h3>
+            <p>Every commit auto-generates an AI description via GitHub Copilot CLI. You'll never forget what past-you was building.</p>
+          </div>
+          <div class="step-terminal">
+            <div class="terminal terminal--compact" data-terminal="step-list">
+              <div class="terminal-bar">
+                <div class="terminal-dot terminal-dot--red"></div>
+                <div class="terminal-dot terminal-dot--yellow"></div>
+                <div class="terminal-dot terminal-dot--green"></div>
+                <div class="terminal-title">terminal</div>
+                <div style="width:42px;"></div>
+              </div>
+              <div class="terminal-body"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 03: Ship or scrap -->
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h3>Ship or scrap</h3>
+            <p>Graduate it to a real project with <em>export</em>, or clean it up when the guilt of digital hoarding sets in. No judgement either way.</p>
+          </div>
+          <div class="step-terminal">
+            <div class="terminal terminal--compact" data-terminal="step-export">
+              <div class="terminal-bar">
+                <div class="terminal-dot terminal-dot--red"></div>
+                <div class="terminal-dot terminal-dot--yellow"></div>
+                <div class="terminal-dot terminal-dot--green"></div>
+                <div class="terminal-title">terminal</div>
+                <div style="width:42px;"></div>
+              </div>
+              <div class="terminal-body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Templates ────────────────────────────────────── -->
+  <section id="templates">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Templates</div>
+        <h2 class="section-heading">Built-in starters that<br>Just Work.</h2>
+        <p class="section-desc">
+          Ship with sensible defaults for popular stacks. Override any of them or add your own via <code style="font-size:0.8rem;background:var(--surface);padding:0.15em 0.5em;border-radius:4px;">~/.riff/config.json</code>.
+        </p>
+      </div>
+      <div class="templates-grid reveal">
+        <div class="template-card">
+          <div class="template-name">React</div>
+          <div class="template-cmd">bunx create-vite . --template react-ts</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Next.js</div>
+          <div class="template-cmd">bunx create-next-app . --ts --app</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Python</div>
+          <div class="template-cmd">uv init</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Rust</div>
+          <div class="template-cmd">cargo init .</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Go</div>
+          <div class="template-cmd">go mod init temp</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Bun</div>
+          <div class="template-cmd">bun init -y</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">Node</div>
+          <div class="template-cmd">npm init -y</div>
+        </div>
+        <div class="template-card">
+          <div class="template-name">.NET</div>
+          <div class="template-cmd">dotnet new console</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ──────────────────────────────────────────── -->
+  <section class="cta">
+    <div class="container">
+      <h2>Start <em style="font-family:var(--font-display);color:var(--amber);">riffing.</em></h2>
+      <p>Install in seconds. No config. No signup. Just go.</p>
+      <div class="cta-terminal reveal">
+        <div class="terminal terminal--compact" data-terminal="cta-install">
+          <div class="terminal-bar">
+            <div class="terminal-dot terminal-dot--red"></div>
+            <div class="terminal-dot terminal-dot--yellow"></div>
+            <div class="terminal-dot terminal-dot--green"></div>
+            <div class="terminal-title">terminal</div>
+            <div style="width:42px;"></div>
+          </div>
+          <div class="terminal-body"></div>
+        </div>
+      </div>
+      <button class="cta-install" onclick="copyInstall()">
+        <span>go install github.com/torryt/riff@latest</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────── -->
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;">
+      <div>MIT License &middot; built with questionable judgement and Go</div>
+      <div style="display:flex;gap:1.5rem;">
+        <a href="https://github.com/torryt/riff" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/torryt/riff/releases" target="_blank" rel="noopener">Releases</a>
+        <a href="https://github.com/torryt/riff/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
