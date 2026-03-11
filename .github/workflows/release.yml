@@ -5,7 +5,22 @@ on:
     types: [published]
 
 jobs:
+  vulncheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: go.mod
+
   release:
+    needs: vulncheck
     runs-on: ubuntu-latest
     permissions:
       contents: write

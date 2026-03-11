@@ -1,0 +1,47 @@
+name: Vulnerability Scan
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Monday 9am UTC
+
+  workflow_dispatch: # allow manual trigger
+
+jobs:
+  vulncheck:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run govulncheck
+        id: vulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: go.mod
+
+      - name: Create issue on failure
+        if: failure() && steps.vulncheck.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh issue list --label "vulnerability" --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            echo "Open vulnerability issue #$existing already exists, skipping."
+            exit 0
+          fi
+          gh issue create \
+            --title "govulncheck: vulnerability detected in dependencies" \
+            --label "vulnerability" \
+            --body "$(cat <<'EOF'
+          The weekly [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck) scan found known vulnerabilities in project dependencies.
+
+          **Workflow run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Review the workflow logs for full details and update or replace the affected dependencies.
+          EOF
+          )"
