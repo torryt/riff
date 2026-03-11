@@ -93,8 +93,22 @@ func GetProjects() ([]ProjectInfo, error) {
 		projects = append(projects, info)
 	}
 
+	// Sort newest first by Created timestamp. Projects without a parseable
+	// timestamp are pushed to the end, ordered alphabetically by ID.
 	sort.Slice(projects, func(i, j int) bool {
-		return projects[i].ID < projects[j].ID
+		ti, erri := time.Parse(time.RFC3339, projects[i].Created)
+		tj, errj := time.Parse(time.RFC3339, projects[j].Created)
+
+		switch {
+		case erri != nil && errj != nil:
+			return projects[i].ID < projects[j].ID
+		case erri != nil:
+			return false
+		case errj != nil:
+			return true
+		default:
+			return ti.After(tj)
+		}
 	})
 
 	return projects, nil

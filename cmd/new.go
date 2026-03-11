@@ -143,7 +143,13 @@ func RunNew(args []string) {
 		_ = gitCmd.Run()
 
 		hookPath := filepath.Join(projectPath, ".git", "hooks", "post-commit")
-		hookContent := "#!/bin/sh\nriff _update-single \"$(git rev-parse --show-toplevel)\" &\n"
+		// Resolve absolute path to riff binary. Git hooks run under /bin/sh with
+		// a minimal PATH that may not include the directory where riff is installed.
+		riffBin, err := os.Executable()
+		if err != nil {
+			riffBin = "riff" // fallback to PATH lookup
+		}
+		hookContent := fmt.Sprintf("#!/bin/sh\n%s _update-single \"$(git rev-parse --show-toplevel)\" &\n", riffBin)
 		if err := os.WriteFile(hookPath, []byte(hookContent), 0755); err != nil {
 			// Non-fatal: git hook setup failure shouldn't abort project creation
 			fmt.Fprintln(os.Stderr, internal.Dim("Note: could not write git post-commit hook: "+err.Error()))
