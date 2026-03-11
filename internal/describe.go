@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
-	"syscall"
 )
 
 const describePrompt = "Describe this project's contents and theme in exactly 7-8 words. Reply with ONLY the description, nothing else."
@@ -157,7 +156,7 @@ func BackfillDescriptions(projects []ProjectInfo) {
 		cmd.Stdout = nil
 		cmd.Stderr = nil
 		// Detach from parent — process survives if riff exits.
-		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+		detachProcess(cmd)
 		if err := cmd.Start(); err == nil {
 			spawned++
 		}
