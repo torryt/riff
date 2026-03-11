@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/charmbracelet/huh"
 	"github.com/torryt/riff/internal"
@@ -44,8 +43,8 @@ func RunExport(args []string) {
 		return
 	}
 
-	// Fill in any missing descriptions before displaying the picker.
-	internal.BackfillDescriptions(projects, 15*time.Second)
+	// Kick off background generation for any missing descriptions.
+	internal.BackfillDescriptions(projects)
 
 	// Helper: print available projects for non-interactive fallback.
 	printProjects := func() {

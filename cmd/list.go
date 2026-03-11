@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/torryt/riff/internal"
 )
@@ -21,8 +20,8 @@ func RunList(args []string) {
 		return
 	}
 
-	// Fill in any missing descriptions in the background before displaying.
-	internal.BackfillDescriptions(projects, 15*time.Second)
+	// Kick off background generation for any missing descriptions.
+	internal.BackfillDescriptions(projects)
 
 	fmt.Printf("  %s\n\n", internal.Bold(fmt.Sprintf("%d project(s)", len(projects))))
 

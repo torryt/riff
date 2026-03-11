@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
-	"time"
+	"syscall"
 )
 
 const describePrompt = "Describe this project's contents and theme in exactly 7-8 words. Reply with ONLY the description, nothing else."
@@ -119,13 +119,12 @@ func GenerateDescription(projectPath string) (string, error) {
 	return description, nil
 }
 
-// BackfillDescriptions generates descriptions for every project in the
-// slice that currently has an empty Description. Generations run in
-// parallel and are capped by timeout. Projects whose descriptions arrive
-// in time are updated both in the slice and on disk (.riff.json).
-// The function prints a brief status line while working and clears it when
-// done. It is safe to call with an empty or fully-described slice (no-op).
-func BackfillDescriptions(projects []ProjectInfo, timeout time.Duration) {
+// BackfillDescriptions spawns background processes to generate descriptions
+// for every project in the slice that currently has an empty Description.
+// It returns immediately — descriptions are written to disk (.riff.json) by
+// the background processes and will be visible the next time the command runs.
+// It is safe to call with an empty or fully-described slice (no-op).
+func BackfillDescriptions(projects []ProjectInfo) {
 	// Collect indices that need descriptions.
 	var missing []int
 	for i := range projects {
@@ -146,63 +145,33 @@ func BackfillDescriptions(projects []ProjectInfo, timeout time.Duration) {
 		return
 	}
 
-	// Show a brief status line.
-	noun := "description"
-	if len(missing) > 1 {
-		noun = "descriptions"
-	}
-	statusMsg := fmt.Sprintf("  %s Generating %d %s %s",
-		Dim("~"), len(missing), noun, Dim("via "+llmProvider()))
-	fmt.Print(statusMsg)
-
-	type result struct {
-		index int
-		desc  string
+	// Resolve our own binary path for spawning background processes.
+	riffBin, err := os.Executable()
+	if err != nil {
+		riffBin = "riff" // fallback to PATH lookup
 	}
 
-	results := make(chan result, len(missing))
-	var wg sync.WaitGroup
-
+	spawned := 0
 	for _, idx := range missing {
-		wg.Add(1)
-		go func(i int) {
-			defer wg.Done()
-			desc, err := UpdateProjectDescription(projects[i].Path)
-			if err == nil && desc != "" {
-				results <- result{index: i, desc: desc}
-			}
-		}(idx)
-	}
-
-	// Close results channel once all goroutines finish.
-	go func() {
-		wg.Wait()
-		close(results)
-	}()
-
-	// Collect results until timeout or all done.
-	timer := time.NewTimer(timeout)
-	defer timer.Stop()
-
-	filled := 0
-loop:
-	for {
-		select {
-		case r, ok := <-results:
-			if !ok {
-				break loop // channel closed, all done
-			}
-			projects[r.index].Description = r.desc
-			filled++
-		case <-timer.C:
-			break loop
+		cmd := exec.Command(riffBin, "_update-single", projects[idx].Path)
+		cmd.Stdout = nil
+		cmd.Stderr = nil
+		// Detach from parent — process survives if riff exits.
+		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+		if err := cmd.Start(); err == nil {
+			spawned++
 		}
 	}
 
-	// Clear the status line.
-	fmt.Print("\r" + strings.Repeat(" ", len(statusMsg)) + "\r")
-
-	_ = filled
+	if spawned > 0 {
+		noun := "description"
+		if spawned > 1 {
+			noun = "descriptions"
+		}
+		fmt.Printf("  %s\n",
+			Dim(fmt.Sprintf("~ Generating %d %s in background via %s",
+				spawned, noun, llmProvider())))
+	}
 }
 
 // UpdateProjectDescription generates a description for the project at

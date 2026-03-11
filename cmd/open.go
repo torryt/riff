@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/charmbracelet/huh"
 	"github.com/torryt/riff/internal"
@@ -25,8 +24,8 @@ func RunOpen(args []string) {
 		return
 	}
 
-	// Fill in any missing descriptions in the background before displaying.
-	internal.BackfillDescriptions(projects, 15*time.Second)
+	// Kick off background generation for any missing descriptions.
+	internal.BackfillDescriptions(projects)
 
 	// Helper: print available projects (used in non-interactive fallback).
 	printProjects := func() {
