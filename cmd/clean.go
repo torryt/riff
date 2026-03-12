@@ -80,7 +80,7 @@ func RunClean(args []string) {
 
 		var selectedIDs []string
 		err := huh.NewMultiSelect[string]().
-			Title("Select projects to delete").
+			Title("Select projects to archive").
 			Options(options...).
 			Value(&selectedIDs).
 			Run()
@@ -126,14 +126,14 @@ func RunClean(args []string) {
 		return
 	}
 
-	// Confirm deletion.
+	// Confirm archival.
 	var confirmed bool
-	confirmMsg := fmt.Sprintf("Delete %d project(s)? This cannot be undone.", len(toDelete))
+	confirmMsg := fmt.Sprintf("Archive %d project(s)?", len(toDelete))
 
 	if internal.IsInteractive() {
 		err := huh.NewConfirm().
 			Title(confirmMsg).
-			Affirmative("Yes, delete").
+			Affirmative("Yes, archive").
 			Negative("Cancel").
 			Value(&confirmed).
 			Run()
@@ -142,7 +142,6 @@ func RunClean(args []string) {
 			return
 		}
 	} else {
-		// Non-interactive: when called with an explicit ID, use a simple y/N prompt.
 		fmt.Printf("  %s [y/N] ", confirmMsg)
 		var answer string
 		fmt.Scanln(&answer)
@@ -152,16 +151,17 @@ func RunClean(args []string) {
 		}
 	}
 
-	// Delete projects.
-	deleted := 0
+	// Archive projects.
+	archived := 0
 	for _, p := range toDelete {
-		if err := os.RemoveAll(p.Path); err != nil {
-			fmt.Printf("  %s Failed to delete %s\n", internal.Red("x"), internal.Cyan(p.ID))
+		if err := internal.ArchiveProject(p); err != nil {
+			fmt.Printf("  %s Failed to archive %s: %v\n", internal.Red("x"), internal.Cyan(p.ID), err)
 		} else {
-			fmt.Printf("  %s Deleted %s\n", internal.Red("-"), internal.Cyan(p.ID))
-			deleted++
+			fmt.Printf("  %s Archived %s\n", internal.Yellow("~"), internal.Cyan(p.ID))
+			archived++
 		}
 	}
 
-	fmt.Printf("  %s %s deleted\n", internal.Bold("Done."), internal.Red(fmt.Sprintf("%d", deleted)))
+	fmt.Printf("  %s %s archived\n", internal.Bold("Done."), internal.Yellow(fmt.Sprintf("%d", archived)))
+	fmt.Printf("  %s\n", internal.Dim("Restore with: riff archive  •  Purge with: riff archive purge"))
 }

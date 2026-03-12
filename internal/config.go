@@ -11,6 +11,7 @@ import (
 var (
 	RiffDir     string
 	ProjectsDir string
+	ArchiveDir  string
 	CdPathFile  string
 )
 
@@ -33,6 +34,7 @@ func InitPaths() {
 	}
 	RiffDir = dir
 	ProjectsDir = filepath.Join(RiffDir, "projects")
+	ArchiveDir = filepath.Join(RiffDir, "archive")
 	CdPathFile = filepath.Join(RiffDir, ".cd-path")
 }
 

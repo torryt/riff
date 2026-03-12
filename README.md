@@ -12,6 +12,7 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 
 ## Index
 
+- [Supported platforms](#-supported-platforms)
 - [Features](#-features)
 - [Installation](#-installation)
 - [Usage](#-usage)
@@ -36,9 +37,22 @@ Each project lives in `~/.riff/` and gets an auto-generated AI description so yo
 - 📋 **List** all your projects with AI-generated descriptions
 - 📂 **Open** projects interactively or by ID
 - 📤 **Export** a project to any local folder when you're ready to ship it
-- 🧹 **Clean** up projects individually or in bulk (Marie Kondo mode included)
+- 🧹 **Clean** up projects individually or in bulk — archives them safely instead of deleting
+- 🗄️ **Archive** management — list archived projects and permanently purge when ready
 - 🤖 **Auto-describe** projects via Claude Code or GitHub Copilot CLI — because you *will* forget what this one does
 - 🌍 **Framework-agnostic** — Bun, Python, Rust, Go, Node, React, Next.js, or just an empty folder
+
+## 💻 Supported platforms
+
+| Platform | Status |
+|---|---|
+| macOS | ✅ Fully supported |
+| Linux | ✅ Fully supported |
+| Windows (WSL) | ✅ Fully supported |
+
+**Shell support:** bash, zsh, and fish.
+
+> **Note:** riff requires a Unix-like shell environment. On Windows, use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux).
 
 ## 📦 Installation
 
@@ -72,7 +86,9 @@ riff <command> [options]
 | `riff new [template]` | Create a fresh project (pass template name or use interactive picker) |
 | `riff list` (or `ls`) | List all projects with descriptions |
 | `riff open [id]` | Open a project (interactive picker if no ID) |
-| `riff clean [id]` (or `rm`) | Delete projects (multi-select if no ID) |
+| `riff clean [id]` (or `rm`) | Archive projects (multi-select if no ID) |
+| `riff archive` | List archived projects |
+| `riff archive purge [id]` | Permanently delete archived projects |
 | `riff export <folder> [id]` | Export a project to a local folder (interactive picker if no ID) |
 | `riff config <init\|path>` | Manage configuration (initialize or print path) |
 | `riff init [shell]` | Shell setup for auto-cd (auto-detects shell) |
@@ -91,8 +107,14 @@ riff list
 # Jump back into one
 riff open
 
-# Marie Kondo the ones that no longer spark joy
+# Marie Kondo the ones that no longer spark joy (safely archived)
 riff clean
+
+# See what's in the archive
+riff archive
+
+# Permanently delete archived projects when you're sure
+riff archive purge
 
 # Graduate a prototype to a real project
 riff export ~/code/my-new-thing
@@ -119,7 +141,7 @@ riff new --no-git               # skip git init
 1. `riff new` creates a directory under `~/.riff/` with a random 7-char ID, optionally runs a template command, and sets up a git repo with a post-commit hook
 2. Every time you commit, the hook asks your AI provider to summarize your project in ~7 words (it's surprisingly good at this)
 3. `riff list` shows all your projects with their descriptions — no more opening 14 folders to find the one with the WebSocket experiment
-4. `riff clean` lets you select and delete projects when the guilt of digital hoarding sets in
+4. `riff clean` archives projects to `~/.riff/archive/` when the guilt of digital hoarding sets in — nothing is permanently deleted until you run `riff archive purge`
 
 ## ⚙️ Configuration
 

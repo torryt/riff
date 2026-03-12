@@ -66,10 +66,12 @@ const terminals = {
     { type: 'cursor' },
   ],
   'step-export': [
-    { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">riff</span> <span class="flag">export a7x9k2m</span> <span class="output">~/projects/chat-app</span>' },
+    { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">riff</span> <span class="flag">clean w2kd5t9</span>' },
+    { type: 'output', html: '<span class="output">~ Archived</span> <span class="id">w2kd5t9</span>' },
+    { type: 'output', html: '<span class="output">Done.</span> <span class="desc">1 archived</span>' },
     { type: 'blank' },
+    { type: 'cmd',    html: '<span class="prompt-char">$</span> <span class="cmd">riff</span> <span class="flag">export a7x9k2m</span> <span class="output">~/projects/chat-app</span>' },
     { type: 'output', html: '<span class="highlight">Exported</span> <span class="id">a7x9k2m</span> <span class="output">to</span> ~/projects/chat-app' },
-    { type: 'output', html: '<span class="output">Git history preserved. Go ship it.</span>' },
     { type: 'cursor' },
   ],
   'cta-install': [

@@ -114,6 +114,71 @@ func GetProjects() ([]ProjectInfo, error) {
 	return projects, nil
 }
 
+// GetArchivedProjects reads all project directories inside ArchiveDir and
+// returns a sorted slice of ProjectInfo (newest first).
+func GetArchivedProjects() ([]ProjectInfo, error) {
+	entries, err := os.ReadDir(ArchiveDir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	var projects []ProjectInfo
+
+	for _, entry := range entries {
+		name := entry.Name()
+		if len(name) > 0 && name[0] == '.' {
+			continue
+		}
+		if !entry.IsDir() {
+			continue
+		}
+
+		projectPath := filepath.Join(ArchiveDir, name)
+		info := ProjectInfo{
+			ID:   name,
+			Path: projectPath,
+		}
+
+		meta, err := ReadMetadata(projectPath)
+		if err == nil {
+			info.Description = meta.Description
+			info.Template = meta.Template
+			info.Created = meta.Created
+		}
+
+		projects = append(projects, info)
+	}
+
+	sort.Slice(projects, func(i, j int) bool {
+		ti, erri := time.Parse(time.RFC3339, projects[i].Created)
+		tj, errj := time.Parse(time.RFC3339, projects[j].Created)
+		switch {
+		case erri != nil && errj != nil:
+			return projects[i].ID < projects[j].ID
+		case erri != nil:
+			return false
+		case errj != nil:
+			return true
+		default:
+			return ti.After(tj)
+		}
+	})
+
+	return projects, nil
+}
+
+// ArchiveProject moves a project from ProjectsDir to ArchiveDir.
+func ArchiveProject(p ProjectInfo) error {
+	if err := os.MkdirAll(ArchiveDir, 0o755); err != nil {
+		return err
+	}
+	dest := filepath.Join(ArchiveDir, p.ID)
+	return os.Rename(p.Path, dest)
+}
+
 // GenerateID returns a random alphanumeric string of the given length.
 // The character set is [a-zA-Z0-9] (62 characters). If length is <= 0, the
 // default length of 7 is used.

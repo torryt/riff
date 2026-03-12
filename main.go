@@ -54,6 +54,8 @@ func main() {
 		cmd.RunOpen(args)
 	case "clean", "rm":
 		cmd.RunClean(args)
+	case "archive":
+		cmd.RunArchive(args)
 	case "init":
 		cmd.RunInit(args)
 	case "config":
@@ -96,7 +98,9 @@ func printHelp() {
 	fmt.Printf("    %s %s\n", padRight(internal.Green("new")+" "+internal.Dim("[template]"), 20), "Create a new project")
 	fmt.Printf("    %s %s\n", padRight(internal.Green("list")+internal.Dim(", ls"), 20), "List all projects")
 	fmt.Printf("    %s %s\n", padRight(internal.Green("open")+" "+internal.Dim("[id]"), 20), "Open a project (picks from list if no ID)")
-	fmt.Printf("    %s %s\n", padRight(internal.Green("clean")+" "+internal.Dim("[id]"), 20), "Delete projects")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("clean")+" "+internal.Dim("[id]"), 20), "Archive projects (move to ~/.riff/archive)")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("archive"), 20), "List archived projects")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("archive purge")+" "+internal.Dim("[id]"), 20), "Permanently delete archived projects")
 	fmt.Printf("    %s %s\n", padRight(internal.Green("export")+" "+internal.Dim("<path> [id]"), 20), "Export a project to a folder (created if needed)")
 	fmt.Printf("    %s %s\n", padRight(internal.Green("init")+" "+internal.Dim("[shell]"), 20), "Shell setup for auto-cd (auto-detects shell)")
 	fmt.Printf("    %s %s\n", padRight(internal.Green("config")+" "+internal.Dim("<init|path>"), 20), "Manage configuration")

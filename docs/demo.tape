@@ -55,7 +55,7 @@ Enter
 Sleep 3s
 Ctrl+L
 
-# --- Scene 6: Clean up one project ---
+# --- Scene 6: Archive one project ---
 Type "riff clean"
 Sleep 300ms
 Enter
@@ -70,8 +70,15 @@ Sleep 500ms
 Enter
 Sleep 1s
 
-# Confirm deletion
+# Confirm archival
 Type "y"
 Sleep 500ms
 Enter
 Sleep 2s
+Ctrl+L
+
+# --- Scene 7: Show archived projects ---
+Type "riff archive"
+Sleep 300ms
+Enter
+Sleep 3s
