@@ -84,7 +84,7 @@ func printHelp() {
 	fmt.Printf("    %-20s %s\n", internal.Green("list")+internal.Dim(", ls"), "List all projects")
 	fmt.Printf("    %-20s %s\n", internal.Green("open")+" "+internal.Dim("[id]"), "Open a project (picks from list if no ID)")
 	fmt.Printf("    %-20s %s\n", internal.Green("clean")+" "+internal.Dim("[id]"), "Delete projects")
-	fmt.Printf("    %-20s %s\n", internal.Green("export")+" "+internal.Dim("<folder> [id]"), "Export a project to a local folder")
+	fmt.Printf("    %-20s %s\n", internal.Green("export")+" "+internal.Dim("<path> [id]"), "Export a project to a folder (created if needed)")
 	fmt.Printf("    %-20s %s\n", internal.Green("init")+" "+internal.Dim("[shell]"), "Shell setup for auto-cd (auto-detects shell)")
 	fmt.Printf("    %-20s %s\n", internal.Green("config")+" "+internal.Dim("<init|path>"), "Manage configuration")
 	fmt.Printf("    %-20s %s\n", internal.Green("update-docs"), "Regenerate descriptions for all projects")

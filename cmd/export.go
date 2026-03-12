@@ -28,7 +28,7 @@ func RunExport(args []string) {
 	}
 
 	if destFolder == "" {
-		fmt.Fprintf(os.Stderr, "  %s Usage: riff export <folder> [id]\n", internal.Red("x"))
+		fmt.Fprintf(os.Stderr, "  %s Usage: riff export <path> [id]\n", internal.Red("x"))
 		os.Exit(1)
 	}
 
@@ -106,18 +106,27 @@ func RunExport(args []string) {
 	// Resolve the source path.
 	srcPath := filepath.Join(internal.ProjectsDir, projectID)
 
-	// Resolve destination: relative to current working directory.
-	cwd, err := os.Getwd()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "  %s Could not determine current directory: %v\n", internal.Red("x"), err)
-		os.Exit(1)
+	// Resolve destination: use as-is if absolute, otherwise relative to cwd.
+	destPath := destFolder
+	if !filepath.IsAbs(destPath) {
+		cwd, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "  %s Could not determine current directory: %v\n", internal.Red("x"), err)
+			os.Exit(1)
+		}
+		destPath = filepath.Join(cwd, destFolder)
 	}
-	destPath := filepath.Join(cwd, destFolder)
 
 	// Refuse to overwrite an existing destination.
 	if _, statErr := os.Stat(destPath); statErr == nil {
 		fmt.Fprintf(os.Stderr, "  %s Destination %q already exists. Choose a different folder name.\n",
 			internal.Red("x"), destFolder)
+		os.Exit(1)
+	}
+
+	// Ensure parent directories exist so the user can specify nested paths.
+	if err := os.MkdirAll(filepath.Dir(destPath), 0o755); err != nil {
+		fmt.Fprintf(os.Stderr, "  %s Could not create parent directories: %v\n", internal.Red("x"), err)
 		os.Exit(1)
 	}
 
@@ -127,22 +136,20 @@ func RunExport(args []string) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("  %s Exported %s → %s\n",
+	fmt.Printf("  %s Exported project to %s\n",
 		internal.Green("+"),
-		internal.Cyan(projectID),
-		internal.Bold(destFolder),
+		internal.Bold(destPath),
 	)
+	fmt.Printf("\n    %s\n", internal.Cyan("cd "+destPath))
 }
 
 // copyDir recursively copies src into dst, preserving file modes.
-// dst must not already exist.
 func copyDir(src, dst string) error {
 	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// Compute the corresponding destination path.
 		rel, err := filepath.Rel(src, path)
 		if err != nil {
 			return err
@@ -151,6 +158,11 @@ func copyDir(src, dst string) error {
 
 		if info.IsDir() {
 			return os.MkdirAll(target, info.Mode())
+		}
+
+		// Skip symlinks and other non-regular files.
+		if !info.Mode().IsRegular() {
+			return nil
 		}
 
 		return copyFile(path, target, info.Mode())
