@@ -2,6 +2,10 @@
 
 > Throwaway projects for every language, without the existential dread of naming them.
 
+<p align="center">
+  <img src="docs/demo.gif" alt="riff demo" width="800" />
+</p>
+
 **riff** is a CLI tool for creating and managing disposable project workspaces. Need to spike something out? Test a weird idea at 2am? Prototype that thing your coworker said was "impossible"? Spin up an isolated project in any language, hack away, and clean up when you're done — or don't. We won't judge.
 
 Each project lives in `~/.riff/` and gets an auto-generated AI description so you can figure out what past-you was thinking. 🔮

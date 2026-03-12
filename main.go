@@ -3,11 +3,24 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"runtime/debug"
+	"strings"
 
 	"github.com/torryt/riff/cmd"
 	"github.com/torryt/riff/internal"
 )
+
+var ansiRe = regexp.MustCompile(`\x1b\[[0-9;]*m`)
+
+// padRight pads s to width based on visible (non-ANSI) length.
+func padRight(s string, width int) string {
+	visible := len(ansiRe.ReplaceAllString(s, ""))
+	if visible >= width {
+		return s
+	}
+	return s + strings.Repeat(" ", width-visible)
+}
 
 // version is set at build time via -ldflags "-X main.version=..."
 // When installed via `go install`, it falls back to the module version.
@@ -80,21 +93,21 @@ func printHelp() {
 	fmt.Printf("  %s  %s %s\n\n", internal.Bold("Usage:"), internal.Cyan("riff"), "[command|template] [options]")
 
 	fmt.Printf("  %s\n", internal.Bold("Commands:"))
-	fmt.Printf("    %-20s %s\n", internal.Green("new")+" "+internal.Dim("[template]"), "Create a new project")
-	fmt.Printf("    %-20s %s\n", internal.Green("list")+internal.Dim(", ls"), "List all projects")
-	fmt.Printf("    %-20s %s\n", internal.Green("open")+" "+internal.Dim("[id]"), "Open a project (picks from list if no ID)")
-	fmt.Printf("    %-20s %s\n", internal.Green("clean")+" "+internal.Dim("[id]"), "Delete projects")
-	fmt.Printf("    %-20s %s\n", internal.Green("export")+" "+internal.Dim("<path> [id]"), "Export a project to a folder (created if needed)")
-	fmt.Printf("    %-20s %s\n", internal.Green("init")+" "+internal.Dim("[shell]"), "Shell setup for auto-cd (auto-detects shell)")
-	fmt.Printf("    %-20s %s\n", internal.Green("config")+" "+internal.Dim("<init|path>"), "Manage configuration")
-	fmt.Printf("    %-20s %s\n", internal.Green("update-docs"), "Regenerate descriptions for all projects")
-	fmt.Printf("    %-20s %s\n", internal.Green("help"), "Show this help message")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("new")+" "+internal.Dim("[template]"), 20), "Create a new project")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("list")+internal.Dim(", ls"), 20), "List all projects")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("open")+" "+internal.Dim("[id]"), 20), "Open a project (picks from list if no ID)")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("clean")+" "+internal.Dim("[id]"), 20), "Delete projects")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("export")+" "+internal.Dim("<path> [id]"), 20), "Export a project to a folder (created if needed)")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("init")+" "+internal.Dim("[shell]"), 20), "Shell setup for auto-cd (auto-detects shell)")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("config")+" "+internal.Dim("<init|path>"), 20), "Manage configuration")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("update-docs"), 20), "Regenerate descriptions for all projects")
+	fmt.Printf("    %s %s\n", padRight(internal.Green("help"), 20), "Show this help message")
 
 	fmt.Printf("\n  %s\n", internal.Bold("Flags:"))
-	fmt.Printf("    %-28s %s\n", internal.Dim("--version, -v"), "Print version")
+	fmt.Printf("    %s %s\n", padRight(internal.Dim("--version, -v"), 20), "Print version")
 
 	fmt.Printf("\n  %s %s\n", internal.Bold("Flags"), internal.Dim("(for new):"))
-	fmt.Printf("    %-28s %s\n", internal.Dim("--run")+" "+internal.Dim(`"<cmd>"`), "Run arbitrary init command")
-	fmt.Printf("    %-28s %s\n", internal.Dim("--no-git"), "Skip git initialization")
+	fmt.Printf("    %s %s\n", padRight(internal.Dim("--run")+" "+internal.Dim(`"<cmd>"`), 20), "Run arbitrary init command")
+	fmt.Printf("    %s %s\n", padRight(internal.Dim("--no-git"), 20), "Skip git initialization")
 	fmt.Println()
 }
