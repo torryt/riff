@@ -173,6 +173,11 @@ func RunNew(args []string) {
 	}
 
 	// --- Print success ---
+	if !internal.HasLLM() {
+		fmt.Printf("  %s\n\n",
+			internal.Dim("Tips: Install Claude Code or GitHub Copilot CLI to auto-generate project descriptions."),
+		)
+	}
 	fmt.Printf("  %s Created new project %s\n",
 		internal.Green("+"),
 		internal.Bold(internal.Cyan(id)),

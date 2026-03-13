@@ -20,8 +20,7 @@ func RunUpdateDocs(args []string) {
 	}
 
 	if !internal.HasLLM() {
-		fmt.Printf("  %s\n\n", internal.Dim("No AI helper found — install one to generate descriptions:"))
-		fmt.Println(internal.Dim("  Supported: claude (Claude Code), copilot (GitHub Copilot CLI)"))
+		fmt.Printf("  %s\n\n", internal.Dim("Tips: Install Claude Code or GitHub Copilot CLI to generate descriptions."))
 		fmt.Println(internal.Dim("  Set a default with \"ai_provider\" in ~/.riff/config.json"))
 		return
 	}

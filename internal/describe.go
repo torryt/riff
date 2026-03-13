@@ -139,7 +139,7 @@ func BackfillDescriptions(projects []ProjectInfo) {
 	if llmProvider() == "" {
 		fmt.Printf("  %s %s\n",
 			Dim("~"),
-			Dim("No AI helper found — install Claude Code or Copilot, or set \"ai_provider\" in ~/.riff/config.json"),
+			Dim("Tips: Install Claude Code or GitHub Copilot CLI to auto-generate project descriptions."),
 		)
 		return
 	}
