@@ -40,7 +40,9 @@ Data lives in `~/.riff/`. Per-project metadata in `.riff.json` (not `package.jso
 Releases are cut via GitHub. Goreleaser runs as a GitHub Action on new tags and builds cross-platform binaries + Homebrew tap.
 
 1. Bump the patch version from the latest tag: `git tag --sort=-v:refname | head -1`
-2. Create a GitHub release with notes: `gh release create vX.Y.Z --generate-notes`
+2. Inspect commits since last release: `git log vX.Y.Z..HEAD --oneline`
+3. Write release notes summarising user-facing changes (skip `docs:`, `test:`, `ci:` prefixed commits)
+4. Create a GitHub release with notes: `gh release create vX.Y.Z --title "vX.Y.Z" --notes "<notes>"`
 
 ## Conventions
 
