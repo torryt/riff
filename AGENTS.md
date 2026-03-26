@@ -35,6 +35,13 @@ Data lives in `~/.riff/`. Per-project metadata in `.riff.json` (not `package.jso
 3. Add a `case` in the `switch` in `main.go`
 4. Update `printHelp()`
 
+## Releasing
+
+Releases are cut via GitHub. Goreleaser runs as a GitHub Action on new tags and builds cross-platform binaries + Homebrew tap.
+
+1. Bump the patch version from the latest tag: `git tag --sort=-v:refname | head -1`
+2. Create a GitHub release with notes: `gh release create vX.Y.Z --generate-notes`
+
 ## Conventions
 
 - **Go 1.26.1** minimum
