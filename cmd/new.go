@@ -118,8 +118,10 @@ func RunNew(args []string) {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
-			fmt.Fprintln(os.Stderr, internal.Red("Warning: template command failed: "+err.Error()))
-			// Keep the directory — don't exit
+			fmt.Fprintln(os.Stderr, internal.Red("💥 Oops! The "+templateName+" template didn't make it."))
+			// Clean up the failed project directory.
+			os.RemoveAll(projectPath)
+			os.Exit(1)
 		}
 	}
 
